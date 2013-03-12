@@ -16,3 +16,4 @@ def test_connects(mock_connect):
     port = 139
     auth.FileServerConnection(ip, port, "client", "server", "user", "password")
     mock_connect.called_once_with(ip, port)
+
