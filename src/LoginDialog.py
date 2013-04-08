@@ -11,7 +11,7 @@ class LoginDialog(QWidget):
     def __init__(self):
         super(LoginDialog, self).__init__()
         loader = QUiLoader()
-        file = QFile("../ui/login.ui")
+        file = QFile("ui/login.ui")
         file.open(QFile.ReadOnly)
         self.ui = loader.load(file, self)
         file.close()

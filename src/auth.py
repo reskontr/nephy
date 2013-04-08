@@ -1,5 +1,4 @@
 from smb.SMBConnection import SMBConnection
-from smb.base import SharedDevice  
 from PySide.QtCore import *
 
 class FileServerConnection(object):
