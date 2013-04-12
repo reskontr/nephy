@@ -1,8 +1,10 @@
 import mock
 import auth
+import database
 
 @mock.patch("auth.SMBConnection")
 def test_connection_init(mock_SMBConnection):
+    """Tests initialization of SMBConnection class"""
     ip = "10.0.0.2"
     port = 139
     clientName = "Client"
@@ -12,8 +14,14 @@ def test_connection_init(mock_SMBConnection):
 
 @mock.patch.object(auth.SMBConnection, "connect")
 def test_connects(mock_connect):
+    """Tests the connect method of SMBConnection class"""
     ip = "10.0.0.2"
     port = 139
     auth.FileServerConnection(ip, port, "client", "server", "user", "password")
     mock_connect.called_once_with(ip, port)
 
+@mock.patch("database.pyodbc")
+def test_database_connection_init(mock_connect):
+    parameter = "testString"
+    database.DatabaseConnection(parameter)
+    mock_connect.called_once_with(parameter)

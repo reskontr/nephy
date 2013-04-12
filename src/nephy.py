@@ -3,15 +3,20 @@ from PySide.QtGui import *
 import sys
 
 import auth
+import database
 from LoginDialog import LoginDialog
 
 def main():
     app = QApplication(sys.argv)
+
+    #dbConn = database.DatabaseConnection("asd")
+
     connection = None
 
     @Slot(str, str)
     def createConnection(username, password):
-        connection = auth.FileServerConnection("10.0.255.5", 139, "TestClientName", "wired.local", username, password)
+        """Creates connection to windows domain server"""
+        connection = auth.FileServerConnection("192.168.56.1", 139, "macpro", "paju", username, password)
     
     loginDialog = LoginDialog()
     loginDialog.login.connect(createConnection)
