@@ -2,8 +2,7 @@ import mock
 import auth
 
 @mock.patch("auth.SMBConnection")
-def test_connection_init(mock_SMBConnection):
-    """Tests initialization of SMBConnection class"""
+def test_connection_initialized(mock_SMBConnection):
     ip = "10.0.0.2"
     port = 139
     clientName = "Client"
@@ -12,8 +11,7 @@ def test_connection_init(mock_SMBConnection):
     mock_SMBConnection.called_once_with("user", "password", clientName, serverName)
 
 @mock.patch.object(auth.SMBConnection, "connect")
-def test_connects(mock_connect):
-    """Tests the connect method of SMBConnection class"""
+def test_connection_connects(mock_connect):
     ip = "10.0.0.2"
     port = 139
     auth.FileServerConnection(ip, port, "client", "server", "user", "password")

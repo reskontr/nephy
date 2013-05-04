@@ -6,8 +6,10 @@ import sys
 import auth
 
 class LoginDialog(QWidget):
-    """Class for creating a login dialog with username and password fields"""
-    login = Signal(str, str) #Signal for emitting username and password
+    """Dialog with username and password fields"""
+
+    # Signal for emitting the username and password when logging in
+    login = Signal(str, str)
 
     def __init__(self):
         super(LoginDialog, self).__init__()
@@ -20,7 +22,8 @@ class LoginDialog(QWidget):
 
     @Slot()
     def on_buttonBox_accepted(self):
-        """Slot for pressing accept button in login dialog"""
+        """Slot for pressing the login button in the dialog"""
+
         username = self.ui.findChild(QLineEdit, 'lineEditUsername')
         password = self.ui.findChild(QLineEdit, 'lineEditPassword')
         self.login.emit(username.text(), password.text())

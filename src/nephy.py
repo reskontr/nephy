@@ -20,7 +20,7 @@ def main():
 
     @Slot(str, str)
     def createConnection(username, password):
-        """Creates connection to windows domain server"""
+        """Create a connection to the database file server."""
         connection = auth.FileServerConnection(dbServerAddress, dbServerPort, "localhost", dbServerName, username, password)
 
     loginDialog = LoginDialog()
