@@ -4,7 +4,6 @@ from ConfigParser import SafeConfigParser
 import sys
 
 import auth
-import database
 from LoginDialog import LoginDialog
 
 def main():
@@ -16,8 +15,6 @@ def main():
     dbServerPort = config.getint("db", "server_port")
 
     app = QApplication(sys.argv)
-
-    #dbConn = database.DatabaseConnection("asd")
 
     connection = None
 
