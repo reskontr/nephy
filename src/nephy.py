@@ -4,6 +4,7 @@ from ConfigParser import SafeConfigParser
 import sys
 
 import auth
+import database
 from LoginDialog import LoginDialog
 
 def main():
@@ -15,10 +16,14 @@ def main():
     dbServerPort = config.getint("db", "server_port")
 
     app = QApplication(sys.argv)
+
+    #dbConn = database.DatabaseConnection("asd")
+
     connection = None
 
     @Slot(str, str)
     def createConnection(username, password):
+        """Creates connection to windows domain server"""
         connection = auth.FileServerConnection(dbServerAddress, dbServerPort, "localhost", dbServerName, username, password)
 
     loginDialog = LoginDialog()
