@@ -4,83 +4,87 @@ import collections
 import numpy
 
 
-Patient = collections.namedtuple("Patient",
-                                 ["age",
-                                  "height",
-                                  "temperature",
-                                  "measurement"])
+Measurement = collections.namedtuple("Measurement",
+                                     ["measurement",
+                                      "age",
+                                      "height",
+                                      "temperature"])
 
 ReferenceValues = collections.namedtuple("ReferenceValues",
-                                         ["pvalue",
-                                          "tscore",
+                                         ["pValue",
+                                          "tScore",
                                           "estimate",
-                                          "lower_limit",
-                                          "upper_limit"])
+                                          "lowerLimit",
+                                          "upperLimit"])
 
-def is_odd(x):
+class AnalysisError(Exception):
+    pass
+
+def isOdd(x):
     return bool(x & 1)
 
-def calculate_reference_values(measurement,
-                               age,
-                               height,
-                               temperature,
-                               control_patients,
-                               sd_limit,
-                               log=False):
-    def calculate_pvalue(df, tscore):
+def calculateReferenceValues(measurement,
+                             age,
+                             height,
+                             temperature,
+                             controlMeasurements,
+                             sdLimit,
+                             log=False):
+    def calculatePValue(df, tScore):
         if df >= 125:
-            xx = tscore * (1 - 1 / 4 / df) / numpy.sqrt(1 + tscore * tscore / 2 / df)
+            xx = tScore * (1 - 1 / 4 / df) / numpy.sqrt(1 + tScore * tScore / 2 / df)
             xx = abs(xx) / numpy.sqrt(2)
 
-            aa = [0.0705230784,
-                  0.0422820123,
-                  0.0092705272,
-                  0.0001520143,
-                  0.0002765672,
-                  0.0000430638]
-            pvalue = 1 + aa * xx**numpy.arange(1, 7)
+            aa = numpy.array([0.0705230784,
+                              0.0422820123,
+                              0.0092705272,
+                              0.0001520143,
+                              0.0002765672,
+                              0.0000430638])
+            pValue = 1 + aa.dot(xx**numpy.arange(1, 7))
 
-            if pvalue > 0:
-                pvalue = (1 / pvalue)**16
+            if pValue > 0:
+                pValue = (1 / pValue)**16
 
-            return pvalue
+            pValue /= 2
 
-        xx = numpy.arctan(tscore / numpy.sqrt(df))
+            return pValue
+
+        xx = numpy.arctan(tScore / numpy.sqrt(df))
 
         if df == 1:
-            pvalue = 2 * xx / numpy.pi
-            pvalue = 0.5 - 0.5 * pvalue * numpy.sign(tscore)
-            return pvalue
+            pValue = 2 * xx / numpy.pi
+            pValue = 0.5 - 0.5 * pValue * numpy.sign(tScore)
+            return pValue
 
-        if is_odd(df):
-            pvalue = numpy.cos(xx)
+        if isOdd(df):
+            pValue = numpy.cos(xx)
             nb = 2
         else:
-            pvalue = 1
+            pValue = 1
             nb = 1
 
-        s = pvalue
+        s = pValue
         ne = df - 3
         if ne >= nb:
             for i in xrange(nb, ne + 1, 2):
-                pvalue *= numpy.cos(xx) ** 2
-                s += pvalue
+                pValue *= numpy.cos(xx) ** 2 * i / (i + 1)
+                s += pValue
 
-        pvalue = numpy.sin(xx) * s
-        if is_odd(df):
-            pvalue = 2 * (xx + pvalue) / numpy.pi
+        pValue = numpy.sin(xx) * s
+        if isOdd(df):
+            pValue = 2 * (xx + pValue) / numpy.pi
 
-        pvalue = 0.5 - 0.5 * pvalue * numpy.sign(tscore)
-        return pvalue
+        pValue = 0.5 - 0.5 * pValue * numpy.sign(tScore)
+        return pValue
 
-    control_patient_array = numpy.array(control_patients)
-    mltx = numpy.hstack((numpy.ones((len(control_patients), 1)),
-                         control_patient_array[:, :-1]))
-    mlty = control_patient_array[:, -1]
+    if len(controlMeasurements) < 6:
+        raise AnalysisError("need at least 6 control measurements, got {}".format(len(controlMeasurements)))
 
-    if mltx.shape[0] < mltx.shape[1]:
-        # TODO: Raise exception?
-        return
+    controlMeasurementArray = numpy.array(controlMeasurements)
+    mltx = numpy.hstack((numpy.ones((len(controlMeasurements), 1)),
+                         controlMeasurementArray[:, 1:]))
+    mlty = controlMeasurementArray[:, 0]
 
     if log:
         measurement = numpy.log(measurement)
@@ -98,35 +102,35 @@ def calculate_reference_values(measurement,
     syx = syx / (n - m)
 
     x = [1, age, height, temperature]
-    y_est = numpy.inner(a, x)
+    yEst = numpy.inner(a, x)
 
     df = n - m
 
     if df < 20:
-        tt = sd_limit + 2.439 / (df - 1)
+        tt = sdLimit + 2.439 / (df - 1)
     else:
-        tt = sd_limit + 2.439 / df
+        tt = sdLimit + 2.439 / df
 
     sd = 1 + z.dot(x).dot(x)
     sd = numpy.sqrt(syx * sd)
 
-    y_pred = tt * sd
-    tscore = abs(y_est - measurement) / sd
-    pvalue = calculate_pvalue(df, tscore)
+    yPred = tt * sd
+    tScore = abs(yEst - measurement) / sd
+    pValue = calculatePValue(df, tScore)
 
     # Two-tailed test
-    pvalue *= 2
+    pValue *= 2
 
     if log:
-        yl = numpy.exp(y_est - y_pred)
-        yu = numpy.exp(y_est + y_pred)
-        y_est = numpy.exp(y_est)
+        yl = numpy.exp(yEst - yPred)
+        yu = numpy.exp(yEst + yPred)
+        yEst = numpy.exp(yEst)
     else:
-        yl = y_est - y_pred
-        yu = y_est + y_pred
+        yl = yEst - yPred
+        yu = yEst + yPred
 
-    return ReferenceValues(pvalue=pvalue,
-                           tscore=tscore,
-                           estimate=y_est,
-                           lower_limit=yl,
-                           upper_limit=yu)
+    return ReferenceValues(pValue=pValue,
+                           tScore=tScore,
+                           estimate=yEst,
+                           lowerLimit=yl,
+                           upperLimit=yu)
