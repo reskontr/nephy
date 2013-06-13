@@ -27,12 +27,13 @@ def calculateReferenceValues(measurement,
                              age,
                              height,
                              temperature,
-                             controlMeasurements,
+                             normativeMeasurements,
                              sdLimit,
                              log=False):
     def calculatePValue(df, tScore):
         if df >= 125:
-            xx = tScore * (1 - 1 / 4 / df) / numpy.sqrt(1 + tScore * tScore / 2 / df)
+            xx = (tScore * (1 - 1 / 4 / df) /
+                  numpy.sqrt(1 + tScore * tScore / 2 / df))
             xx = abs(xx) / numpy.sqrt(2)
 
             aa = numpy.array([0.0705230784,
@@ -78,13 +79,13 @@ def calculateReferenceValues(measurement,
         pValue = 0.5 - 0.5 * pValue * numpy.sign(tScore)
         return pValue
 
-    if len(controlMeasurements) < 6:
-        raise AnalysisError("need at least 6 control measurements, got {}".format(len(controlMeasurements)))
+    if len(normativeMeasurements) < 6:
+        raise AnalysisError("need at least 6 normative measurements, got {}".format(len(normativeMeasurements)))
 
-    controlMeasurementArray = numpy.array(controlMeasurements)
-    mltx = numpy.hstack((numpy.ones((len(controlMeasurements), 1)),
-                         controlMeasurementArray[:, 1:]))
-    mlty = controlMeasurementArray[:, 0]
+    normativeMeasurementArray = numpy.array(normativeMeasurements)
+    mltx = numpy.hstack((numpy.ones((len(normativeMeasurements), 1)),
+                         normativeMeasurementArray[:, 1:]))
+    mlty = normativeMeasurementArray[:, 0]
 
     if log:
         measurement = numpy.log(measurement)
@@ -99,7 +100,7 @@ def calculateReferenceValues(measurement,
 
     u = mltx.dot(a)
     syx = sum((mlty - u) ** 2)
-    syx = syx / (n - m)
+    syx /= (n - m)
 
     x = [1, age, height, temperature]
     yEst = numpy.inner(a, x)

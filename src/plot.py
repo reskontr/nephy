@@ -1,7 +1,5 @@
 from __future__ import division
 
-import analysis
-
 import numpy
 
 
@@ -9,17 +7,22 @@ def setterOnly(func):
     return property(fset=func)
 
 class RegressionPlotter(object):
-    def __init__(self, controlMeasurements, xAxis, constants, sdLimit, log=False):
+    def __init__(self,
+                 normativeMeasurements,
+                 xAxis,
+                 constants,
+                 sdLimit,
+                 log=False):
         # Avoid calling _updateXConf and _updateTT multiple times by avoiding
-        # calling the setters before setting controlMeasurements.
+        # calling the setters before setting normativeMeasurements.
         self._xAxis = xAxis
         self._constants = constants
         self._sdLimit = sdLimit
-        self.controlMeasurements = controlMeasurements
+        self.normativeMeasurements = normativeMeasurements
         self.log = log
 
     @setterOnly
-    def controlMeasurements(self, measurements):
+    def normativeMeasurements(self, measurements):
         # TODO: This method implies too much knowledge about the Measurement type?
         array = numpy.array(measurements)
         self.mltx = numpy.hstack((numpy.ones((len(array), 1)),
@@ -72,14 +75,15 @@ class RegressionPlotter(object):
         self.xConf = numpy.ones((self.mltx.shape[0], 1))
         for i in xrange(1, self.mltx.shape[1]):
             if i == self.xAxis:
-                # The column corresponding to the selected x-axis variable contains
-                # linearly spaced values from the minimum to the maximum of the
-                # variable in the control measurements.
+                # The column corresponding to the selected x-axis variable
+                # contains linearly spaced values from the minimum to the
+                # maximum of the variable in the normative measurements.
                 column = numpy.linspace(xMin, xMax, self.mltx.shape[0])
             else:
-                # The other columns are just the corresponding constants entered in
-                # the UI.
-                column = numpy.repeat(self.constants.pop(0), self.mltx.shape[0])
+                # The other columns are just the corresponding constants
+                # entered in the UI.
+                column = numpy.repeat(self.constants.pop(0),
+                                      self.mltx.shape[0])
 
             # Convert from a 1D array into a column vector and add to xConf.
             column = column.reshape((self.mltx.shape[0], 1))
@@ -95,7 +99,7 @@ class RegressionPlotter(object):
         else:
             self.tt = self.sdLimit + 2.439 / df
 
-    def plotAdjustedControlMeasurements(self):
+    def plotAdjustedNormativeMeasurements(self):
         points = []
         for i, t in enumerate(self.mltx[:, self.xAxis]):
             u = self.mlty[i]

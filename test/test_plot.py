@@ -12,22 +12,22 @@ def assertPlotsAlmostEqual(plot1, plot2):
 
 class TestRegressionPlotter(object):
     def setUp(self):
-        self.controlMeasurements = [analysis.Measurement(3.6, 25.9, 171, 27.5),
-                                    analysis.Measurement(3.0, 33.6, 182, 31.5),
-                                    analysis.Measurement(4.0, 23.1, 167, 30.3),
-                                    analysis.Measurement(3.3, 22.3, 164, 28.9),
-                                    analysis.Measurement(2.9, 27.9, 168, 32.5),
-                                    analysis.Measurement(3.6, 29.3, 171, 27.8)]
+        self.normativeMeasurements = [analysis.Measurement(3.6, 25.9, 171, 27.5),
+                                      analysis.Measurement(3.0, 33.6, 182, 31.5),
+                                      analysis.Measurement(4.0, 23.1, 167, 30.3),
+                                      analysis.Measurement(3.3, 22.3, 164, 28.9),
+                                      analysis.Measurement(2.9, 27.9, 168, 32.5),
+                                      analysis.Measurement(3.6, 29.3, 171, 27.8)]
         self.xAxis = 1
         self.constants = [175, 30]
         self.sdLimit = 2.5
 
-    def testPlotsCorrectAdjustedControlMeasurements(self):
-        plotter = plot.RegressionPlotter(self.controlMeasurements,
+    def testPlotsCorrectAdjustedNormativeMeasurements(self):
+        plotter = plot.RegressionPlotter(self.normativeMeasurements,
                                          self.xAxis,
                                          self.constants,
                                          self.sdLimit)
-        points = plotter.plotAdjustedControlMeasurements()
+        points = plotter.plotAdjustedNormativeMeasurements()
         assertPlotsAlmostEqual(points,
                                [(22.3, 3.65304809267073),
                                 (23.1, 4.35272518507524),
@@ -37,7 +37,7 @@ class TestRegressionPlotter(object):
                                 (33.6, 2.84512425801692)])
 
     def testPlotsCorrectFittedLine(self):
-        plotter = plot.RegressionPlotter(self.controlMeasurements,
+        plotter = plot.RegressionPlotter(self.normativeMeasurements,
                                          self.xAxis,
                                          self.constants,
                                          self.sdLimit)
@@ -51,7 +51,7 @@ class TestRegressionPlotter(object):
                                 (33.6,  2.93873939724549)])
 
     def testPlotsCorrectConfidenceLimits(self):
-        plotter = plot.RegressionPlotter(self.controlMeasurements,
+        plotter = plot.RegressionPlotter(self.normativeMeasurements,
                                          self.xAxis,
                                          self.constants,
                                          self.sdLimit)
@@ -72,7 +72,7 @@ class TestRegressionPlotter(object):
                                 (33.6,  5.40110952052559)])
 
     def testPlotsCorrectPredictionLimits(self):
-        plotter = plot.RegressionPlotter(self.controlMeasurements,
+        plotter = plot.RegressionPlotter(self.normativeMeasurements,
                                          self.xAxis,
                                          self.constants,
                                          self.sdLimit)

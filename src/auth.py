@@ -1,9 +1,7 @@
 import logging
-import ntpath
 import smb
 from cStringIO import StringIO
 from smb.SMBConnection import SMBConnection
-from PySide.QtCore import *
 
 class FileServerException(Exception):
     pass
