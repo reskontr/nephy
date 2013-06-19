@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1680</width>
+    <height>1020</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Nephy</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QPushButton" name="SCV_button">
+    <property name="geometry">
+     <rect>
+      <x>930</x>
+      <y>10</y>
+      <width>55</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>SCV</string>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="p_name">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>160</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="html">
+     <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Ubuntu'; font-size:11pt;&quot;&gt;Potilaan nimi&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="p_ssn">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>10</y>
+      <width>160</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="html">
+     <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Ubuntu'; font-size:11pt;&quot;&gt;Henkilötunnus&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="MEP_button">
+    <property name="geometry">
+     <rect>
+      <x>1070</x>
+      <y>10</y>
+      <width>55</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>MEP</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="MCV_button">
+    <property name="geometry">
+     <rect>
+      <x>860</x>
+      <y>10</y>
+      <width>55</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>MCV</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="VEP_button">
+    <property name="geometry">
+     <rect>
+      <x>1280</x>
+      <y>10</y>
+      <width>55</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>VEP</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="F_button">
+    <property name="geometry">
+     <rect>
+      <x>1000</x>
+      <y>10</y>
+      <width>55</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>F</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="BAEP_button">
+    <property name="geometry">
+     <rect>
+      <x>1350</x>
+      <y>10</y>
+      <width>55</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>BAEP</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="SEP_button">
+    <property name="geometry">
+     <rect>
+      <x>1140</x>
+      <y>10</y>
+      <width>55</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>SEP</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="KVH_button">
+    <property name="geometry">
+     <rect>
+      <x>1420</x>
+      <y>10</y>
+      <width>55</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>KVH</string>
+    </property>
+   </widget>
+   <widget class="QFrame" name="frame">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>60</y>
+      <width>810</width>
+      <height>921</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <widget class="QLabel" name="m_name">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>231</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>[measurement_name]</string>
+     </property>
+    </widget>
+    <widget class="QWidget" name="patient_data" native="true">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>790</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <widget class="QLabel" name="p_data_label">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>100</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Potilastiedot:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="age_label">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>35</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Ikä:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="p_length_label">
+      <property name="geometry">
+       <rect>
+        <x>300</x>
+        <y>40</y>
+        <width>55</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Pituus:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="date_label">
+      <property name="geometry">
+       <rect>
+        <x>580</x>
+        <y>20</y>
+        <width>131</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Mittauspäivämäärä:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="p_age">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>40</y>
+        <width>151</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>[patient_age]</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="p_length">
+      <property name="geometry">
+       <rect>
+        <x>370</x>
+        <y>40</y>
+        <width>151</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>[patient_length]</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="date">
+      <property name="geometry">
+       <rect>
+        <x>580</x>
+        <y>40</y>
+        <width>131</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="nerve_info_field" native="true">
+     <property name="geometry">
+      <rect>
+       <x>9</x>
+       <y>109</y>
+       <width>791</width>
+       <height>791</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QTabWidget" name="tabWidget">
+    <property name="geometry">
+     <rect>
+      <x>850</x>
+      <y>60</y>
+      <width>810</width>
+      <height>921</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>1</number>
+    </property>
+    <widget class="QWidget" name="distribution">
+     <attribute name="title">
+      <string>Jakauma</string>
+     </attribute>
+     <widget class="QRadioButton" name="distr_log_radio">
+      <property name="geometry">
+       <rect>
+        <x>710</x>
+        <y>820</y>
+        <width>70</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Log</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="distr_lin_radio">
+      <property name="geometry">
+       <rect>
+        <x>710</x>
+        <y>780</y>
+        <width>70</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Lin</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QFrame" name="d_view_frame">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>781</width>
+        <height>751</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Sunken</enum>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="graph">
+     <attribute name="title">
+      <string>Kuvaaja</string>
+     </attribute>
+     <widget class="QCheckBox" name="regr_button">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>740</y>
+        <width>97</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Regressio</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="graph_lin_radio">
+      <property name="geometry">
+       <rect>
+        <x>710</x>
+        <y>740</y>
+        <width>70</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Lin</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="graph_log_radio">
+      <property name="geometry">
+       <rect>
+        <x>710</x>
+        <y>780</y>
+        <width>70</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Log</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="length_label">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>770</y>
+        <width>66</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Pituus</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="med_t_label">
+      <property name="geometry">
+       <rect>
+        <x>190</x>
+        <y>770</y>
+        <width>91</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Medianus_T</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="sd_label">
+      <property name="geometry">
+       <rect>
+        <x>360</x>
+        <y>770</y>
+        <width>66</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>SD-taso</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="length_cbox">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>790</y>
+        <width>151</width>
+        <height>31</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="med_t_cbox">
+      <property name="geometry">
+       <rect>
+        <x>190</x>
+        <y>790</y>
+        <width>151</width>
+        <height>31</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="sd_cbox">
+      <property name="geometry">
+       <rect>
+        <x>360</x>
+        <y>790</y>
+        <width>151</width>
+        <height>31</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>840</y>
+        <width>481</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Kaava:</string>
+      </property>
+     </widget>
+     <widget class="QFrame" name="g_view_frame">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>781</width>
+        <height>711</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Sunken</enum>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QPushButton" name="ERG_button">
+    <property name="geometry">
+     <rect>
+      <x>1210</x>
+      <y>10</y>
+      <width>55</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>ERG</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="nerve_box">
+    <property name="geometry">
+     <rect>
+      <x>1500</x>
+      <y>10</y>
+      <width>141</width>
+      <height>41</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1680</width>
+     <height>19</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
