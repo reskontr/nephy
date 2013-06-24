@@ -246,10 +246,13 @@ class NephyApp(QObject):
 				sin_field = sindex_field.findChild(QWidget, "sinister")
 				dex_field = sindex_field.findChild(QWidget, "dexter")	
 
-				meas_ampl = MeasurementField(self, "ra_apb", "Ampl", "3,7", "0,0045")
+				example_data1 = {"p_value":0.0045, "t_value":0.5, "std_dev":2, "corresp_min":0, "corresp_max":10, "corresp_default":5, "meas_value":3.7}
+				example_data2 = {"p_value":0.0030, "t_value":1.2, "std_dev":3, "corresp_min":4, "corresp_max":12, "corresp_default":8, "meas_value":3.7}
+
+				meas_ampl = MeasurementField(self, "ra_apb", "Ampl", example_data1)
 				meas_ampl.setParent(sin_field)
 				meas_ampl.move(18, 80)
-				meas_ampl2 = MeasurementField(self, "ra_apb", "Ampl", "3,7", "0,0045")
+				meas_ampl2 = MeasurementField(self, "ra_apb", "Ampl", example_data2)
 				meas_ampl2.setParent(sin_field)
 				meas_ampl2.move(18, 190)
 				
