@@ -20,7 +20,8 @@ class GraphView(QtGui.QGraphicsView):
 		
 	def mouseMoveEvent(self, event):
 		""" Override method for mouse event, displays coordinates of the mouse """ 
-		#print "x: " + str(event.x())
-		#print "y: " + str(event.y())
+		print "x: " + str(event.x())
+		print "y: " + str(event.y())
 		# TODO: find the right method
 		#QToolTip.showText("x: " + str(event.x()) + ", y: " + str(event.y()))
+		QToolTip.showText(QPoint(863, 98), "x: " + str(event.x()) + ", y: " + str(event.y()))
