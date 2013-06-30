@@ -1,7 +1,12 @@
+#pyside
 from PySide.QtUiTools import *
 from PySide.QtCore import *
 from PySide.QtGui import *
 from PySide import QtGui
+
+#pyqtgprah
+import numpy as np
+import pyqtgraph as pg
 
 import copy
 import sys
@@ -11,8 +16,9 @@ from graph_view import GraphView
 from measurement_field import MeasurementField
 
 class NephyApp(QObject):
-	
+	""" Main application code of the Nephy program """
 	patient_chosen = False
+	meas_blocks_shown = False
 	patient_ssn = ""
 	current_measurement = None # MCV, SCV, ...
 	
@@ -36,8 +42,7 @@ class NephyApp(QObject):
 		return filename
 
 	def __init_widgets(self):
-		# Create widgets here with the top level widget being self.ui
-		# Load the UI from a Qt designer file.
+		# Loads the user interface from the main.ui file and connects buttons, checkboxes etc. to the functionality
 		loader = QUiLoader()
 		file = QFile(self.__resource("main.ui"))
 		file.open(QFile.ReadOnly)
@@ -45,13 +50,36 @@ class NephyApp(QObject):
 		file.close()
 		
 		# initializing graphics views for graph and distribution
+		pg.setConfigOption('background', 'w')
+		pg.setConfigOption('foreground', 'k')
+		
 		g_frame = self.ui.findChild(QWidget, "g_view_frame")
-		g_view = GraphView("graph")
-		g_view.setParent(g_frame)
+		self.g_view = GraphView("graph")
+		self.g_view.setParent(g_frame)
 		
 		d_frame = self.ui.findChild(QWidget, "d_view_frame")
-		d_view = GraphView("distribution")
-		d_view.setParent(d_frame)
+		self.d_view = GraphView("distribution")
+		self.d_view.setParent(d_frame)
+		
+		# regression checkbox
+		regr_button = self.ui.findChild(QWidget, "regr_button")
+		regr_button.stateChanged.connect(self.regression_pressed)
+		
+		# length combobox
+		length_cbox = self.ui.findChild(QWidget, "length_cbox")		
+		length_cbox.textChanged.connect(self.length_changed)
+		
+		# sd combobox
+		sd_cbox = self.ui.findChild(QWidget, "sd_cbox")		
+		sd_cbox.textChanged.connect(self.sd_changed)
+		
+		# Medianus t combobox
+		med_t_cbox = self.ui.findChild(QWidget, "med_t_cbox")
+		med_t_cbox.textChanged.connect(self.med_t_changed)
+		
+		# lin log radio buttons (only one of these are needed for the functionality)
+		graph_lin_radio = self.ui.findChild(QWidget, "graph_lin_radio")
+		graph_lin_radio.toggled.connect(self.linlog_changed)	
 		
 		# removing texts from patient data labels
 		p_age = self.ui.findChild(QWidget, "p_age")
@@ -66,18 +94,10 @@ class NephyApp(QObject):
 		actionMCV.clicked.connect(self.pressMCV)
 		
 		actionSCV = self.ui.findChild(QWidget, "SCV_button")
-		actionSCV.clicked.connect(self.pressSCV)		
+		actionSCV.clicked.connect(self.pressSCV)				
+		# TODO: Add the rest of the measurements the same way later...		
 		
-		# TODO: Add the rest of the measurements the same way later...
-		
-		
-		# Patient data 
-		
-		
-		#(DB search with the patient name not implemented in initial version)
-		#patientName = self.ui.findChild(QWidget, "p_name")
-		#patientName.textChanged.connect(self.pNameChanged)
-		
+		# Patient data 		
 		patientSSN = self.ui.findChild(QWidget, "p_ssn")
 		patientSSN.textChanged.connect(self.pSsnChanged)		
 		
@@ -93,7 +113,7 @@ class NephyApp(QObject):
 		# inserting test data
 		dateCombobox.insertItem(0, "12.4.2013")
 		dateCombobox.insertItem(1, "10.4.2013")
-		dateCombobox.activated[str].connect(self.dateChanged) 		
+		dateCombobox.activated[str].connect(self.dateChanged) 				
 		return
 
 
@@ -140,9 +160,9 @@ class NephyApp(QObject):
 	def pNameChanged(self):
 		""" Checks the current name written in the space and searchs
 		    if there's a patient with that name. If the patient is found
-		    from the database, his/her data is fetched and shown in the screen. """
+		    from the database, his/her data is fetched and shown in the screen. 
+		    NOTE: this code isn't ready and used in the initial version of the program """
 		    
-		print "text changed"
 		pn_widget = self.ui.findChild(QWidget, "p_name")
 		patient_name = pn_widget.toPlainText()
 		print patient_name
@@ -160,15 +180,11 @@ class NephyApp(QObject):
 			# Patient with the given name has been found, setting patient data to summary view 
 			nerve_combo_box = self.ui.findChild(QWidget, "nerve_box")		
 			nerve_combo_box.setCurrentIndex(0)
-			self.nerveChanged()		
-
-		return
+			self.nerveChanged()
 		
 	def pSsnChanged(self):
 		""" This method is triggered when SSN is changed. If it matches to patient SSN,
 			the patient data is fetched from the database. """
-			
-		print "SSN changed"
 		ssn_widget = self.ui.findChild(QWidget, "p_ssn")
 		ssn = ssn_widget.toPlainText()
 		
@@ -177,7 +193,6 @@ class NephyApp(QObject):
 			p_age = self.ui.findChild(QWidget, "p_age")
 			p_length = self.ui.findChild(QWidget, "p_length")
 			
-			print ssn
 			# Make database query with SSN and see if there's a match
 			# --> update p_name, p_ssn, p_age, p_length
 			QueryMatch = True
@@ -201,14 +216,13 @@ class NephyApp(QObject):
 				p_age.setText("")
 				p_length.setText("")
 				self.patient_chosen = False
-			
-		return
 		
 	def nerveChanged(self):
-		""" This method is triggered when the nerve is changed in the upper right corner """
-		print "nervebox changed"
-		nervebox = self.ui.findChild(QWidget, "nerve_box")
-		if nervebox.currentText() == "Summary":			
+		""" This method is triggered when the nerve is changed in the upper right corner """		
+		nervebox = self.ui.findChild(QWidget, "nerve_box")		
+		if nervebox.currentText() == "Summary" and self.meas_blocks_shown == True:			
+			# NOTE: Summary is not implemented in the initial version
+			
 			# delete sinister and dexter fields from the nerve_info_field			
 			nerve_info = self.ui.findChild(QWidget, "nerve_info_field")			
 			nerve_layout = nerve_info.layout()
@@ -222,16 +236,19 @@ class NephyApp(QObject):
 			
 			# clear graph and distribution
 			# ...
-			g_view = self.ui.findChild(QWidget, "graph_view")
-			g_view.scene().clear()
+			#g_view = self.ui.findChild(QWidget, "graph_view")
+			#g_view.scene().clear()
 			
-			d_view = self.ui.findChild(QWidget, "distr_view")
-			d_view.scene().clear()
+			#d_view = self.ui.findChild(QWidget, "distr_view")
+			#d_view.scene().clear()
 			
 			# if patient is chosen, generate the summary display from the nerve values
 			# ...
+			self.meas_blocks_shown = False
 			
-		else:
+		elif nervebox.currentText() != "Summary" and self.meas_blocks_shown == False:		
+			# Fetching patient data of the specified nervers and calculating values for measurement blocks
+			# If the patient isn't chosen, showing measurement blocks without patient data 
 			if self.patient_chosen:
 				# Not a summary field so loading fields for sinister and dexter
 				nerve_info = self.ui.findChild(QWidget, "nerve_info_field")			
@@ -249,18 +266,13 @@ class NephyApp(QObject):
 				example_data1 = {"p_value":0.0045, "t_value":0.5, "std_dev":2, "corresp_min":0, "corresp_max":10, "corresp_default":5, "meas_value":3.7}
 				example_data2 = {"p_value":0.0030, "t_value":1.2, "std_dev":3, "corresp_min":4, "corresp_max":12, "corresp_default":8, "meas_value":3.7}
 
-				meas_ampl = MeasurementField(self, "ra_apb", "Ampl", example_data1)
+				# when adding a new measurement block, add 110 pixels to the y coordinate
+				meas_ampl = MeasurementField(self, "ra_apb", "Lat", example_data1)
 				meas_ampl.setParent(sin_field)
 				meas_ampl.move(18, 80)
 				meas_ampl2 = MeasurementField(self, "ra_apb", "Ampl", example_data2)
 				meas_ampl2.setParent(sin_field)
 				meas_ampl2.move(18, 190)
-				
-				#meas_layout_sin.addWidget(meas_ampl)
-				#meas_layout_sin.addWidget(meas_ampl2)
-				
-				#meas_field_sin.setLayout(meas_layout_sin)
-				#meas_field_dex.setLayout(meas_layout_dex)
 				
 				layout = nerve_info.layout()
 				if layout == None:
@@ -272,13 +284,12 @@ class NephyApp(QObject):
 				# showing the layout
 				nerve_info.setLayout(layout)
 				nerve_info.show()
-				print "showed"
-			
-			# updating the graph and distribution
-			print "updating graph"
-			
+				
+				self.meas_blocks_shown = True
+		
+		
 	def dateChanged(self):
-		""" This method is triggered when changing the date of measurements """
+		#This method is triggered when changing the date of measurements
 		# TODO:
 		# o Fetch the measurements of the changed date
 		# o update patient measurement fields
@@ -286,12 +297,13 @@ class NephyApp(QObject):
 		print datebox.currentText()
 		
 	def fetchPatientData(self):
-		""" Makes a database query based on the patients SSN and current measurement (MCV, SCV, ...)"""
+		#Makes a database query based on the patients SSN and current measurement (MCV, SCV, ...)
 		# TODO:
 		# o Construct the query
 		# o fetch the dates and update date combobox
 		# o fetch the newest measurements
 		print "stub"
+	
 	
 	def changeMeasureGraph(self, meas_id):
 		""" Changes the graph to correspond the clicked measurement.
@@ -300,7 +312,59 @@ class NephyApp(QObject):
 		# o construct proper database query with the help of MCV/SCV/... and meas_id
 		# o set sd-level and others back to default state
 		# o draw the graph
-			
-			
-		print "helloxaa"
+		
+		# test data		
+		unit_x = {"name":"ika", "unit":"vuosi"}
+		unit_y = {"name":"MCV: Medianus ra_APB Lat", "unit":"V"}
+
+		test_data_x = [10, 20, 30, 40]
+		test_data_y = [1, 45, 32, 60]
+
+		test_scatter_x = [5, 53, 23, 54]
+		test_scatter_y = [12, 67, 21, 31]
+		
+		self.g_view.setUnits(unit_x, unit_y)
+		if meas_id == "Lat":
+			self.g_view.addRegressionLines(test_scatter_x, test_scatter_y)
+			self.g_view.addReferenceData(test_data_x, test_data_y)		
+		elif meas_id == "Ampl":
+			self.g_view.addRegressionLines(test_data_x, test_data_y)
+			self.g_view.addReferenceData(test_scatter_x, test_scatter_y)
+
  
+	def regression_pressed(self):
+		""" User has pressed the regression button, drawing regression lines or disabling them"""
+		regr_button = self.ui.findChild(QWidget, "regr_button")
+		if regr_button.checkState():
+			print "huuhaa"
+		else:
+			print "tarua"
+
+	def sd_changed(self):
+		""" User has changed the sd level, calculating new values"""
+		print "sd changed"
+		sd_cbox = self.ui.findChild(QWidget, "sd_cbox")		
+		new_sd = sd_cbox.currentText()
+		# todo: calculate new values
+		
+	def length_changed(self):
+		""" Length of the graph has changed, calculating new values """
+		print "length changed"
+		length_cbox = self.ui.findChild(QWidget, "length_cbox")	
+		new_length = length_cbox.currentText()
+		# todo: calculate new values
+		
+	def med_t_changed(self):
+		""" The value of medianus T is changed, calculating new values """
+		print "medianus t changed"
+		med_t_cbox = self.ui.findChild(QWidget, "med_t_cbox")	
+		new_med_t = med_t_cbox.currentText()
+		# todo: calculate new values
+		
+	def linlog_changed(self):
+		""" The linear graph has been changed to logarithmic or vice versa, changing the graph"""
+		graph_lin_radio = self.ui.findChild(QWidget, "graph_lin_radio")
+		if graph_lin_radio.isChecked():
+			print "linear graph"
+		else:
+			print "logarithmic graph"

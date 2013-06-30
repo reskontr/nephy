@@ -82,7 +82,7 @@ class MeasurementField(QtGui.QFrame):
 		graph.setScene(scene)
 	
 	def addStdDev(self, scene, std_dev_numbers):
-		
+		""" Takes standard deviation values as a parameters and adds them to the measurement block """
 		self.std_dev = std_dev_numbers
 		
 		number = scene.addText(str(std_dev_numbers))
@@ -91,7 +91,7 @@ class MeasurementField(QtGui.QFrame):
 		neg_number.setPos(27, 0)
 
 	def addCorrespondingValues(self, scene, min_value, max_value, def_value):
-		# Adds absolute values which correspond to the std deviation values
+		""" Prints values which are corresponding to the standard deviation values, to the measurement block """
 
 		min_val = scene.addText(str(min_value))
 		max_val = scene.addText(str(max_value))
@@ -102,9 +102,10 @@ class MeasurementField(QtGui.QFrame):
 		def_val.setPos(90, 30)	
 		
 	def addTValue(self, scene, t_value):
-		# Adds patient's t-value to the block
+		""" Adds T-value of the patient to the measurement block """
 		
 		def drawArrow(x_coordinate, height):
+			""" draws arrow based on the x coordinate and height of the arrow"""
 			pen = QPen()
 			pen.setStyle(Qt.SolidLine)
 			pen.setWidth(2)
@@ -145,5 +146,5 @@ class MeasurementField(QtGui.QFrame):
 				drawArrow(x_coordinate, 12)
 	
 	def mousePressEvent(self, event):
-		#print "hello"
+		""" triggers the drawing of the graph"""
 		print self.mainApp.changeMeasureGraph(self.meas_id)
