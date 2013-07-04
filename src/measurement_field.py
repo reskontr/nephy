@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: latin-1 -*-
+
 from PySide.QtUiTools import *
 from PySide.QtCore import *
 from PySide.QtGui import *
@@ -24,6 +27,8 @@ class MeasurementField(QtGui.QFrame):
 		#	}
 		
 		super(MeasurementField, self).__init__()
+		self.setGeometry(0, 0, 341, 70)
+		
 		self.mainApp = app
 		self.meas_id = meas
 		
@@ -32,25 +37,29 @@ class MeasurementField(QtGui.QFrame):
 		
 		m_header = QLabel(self)
 		m_header.setText(header)
-		m_header.move(10, 10)
+		m_header.move(7, 7)
 		
 		meas_label = QLabel(self)
 		meas_label.setText(meas)
-		meas_label.move(10,30)
+		meas_label.move(7,27)
 		
-		meas = QLineEdit(self)
+		#meas = QLineEdit(self)
+		meas = QLabel(self)
 		meas.setText(str(meas_data["meas_value"]))
-		meas.setGeometry(70, 30, 55, 21)
-		meas.setReadOnly(True)
+		meas.move(70, 27)
+		#meas.setGeometry(70, 30, 55, 21)
+		#meas.setReadOnly(True)
 		
 		p_label = QLabel(self)
 		p_label.setText("P-arvo: ")
-		p_label.move(10, 60)
+		p_label.move(7, 50)
 		
-		p = QLineEdit(self)
+		#p = QLineEdit(self)
+		p = QLabel(self)
 		p.setText(str(meas_data["p_value"]))
-		p.setGeometry(70, 60, 55, 21)
-		p.setReadOnly(True)		
+		p.move(70, 50)
+		#p.setGeometry(70, 60, 55, 21)
+		#p.setReadOnly(True)		
 		
 		# Drawing picture to the view
 		scene = QGraphicsScene()		
@@ -78,7 +87,7 @@ class MeasurementField(QtGui.QFrame):
 		
 		# initializing graphicsview and adding scene on it
 		graph = QGraphicsView(self)
-		graph.setGeometry(135,30, 201, 60)
+		graph.setGeometry(130, 5, 201, 60)
 		graph.setScene(scene)
 	
 	def addStdDev(self, scene, std_dev_numbers):
@@ -113,9 +122,14 @@ class MeasurementField(QtGui.QFrame):
 			
 			y_coordinate = 30 - height
 			
+			"""
 			scene.addLine(x_coordinate, 30, x_coordinate, y_coordinate, pen)
 			scene.addLine(x_coordinate - 1, y_coordinate, x_coordinate - 4, y_coordinate + 3, pen)
 			scene.addLine(x_coordinate, y_coordinate, x_coordinate + 3, y_coordinate + 3, pen)
+			"""
+			scene.addLine(x_coordinate, 32, x_coordinate, 32 + height, pen)
+			scene.addLine(x_coordinate - 1, 32, x_coordinate - 4, 32 + 3, pen)
+			scene.addLine(x_coordinate, 32, x_coordinate + 3, 32 + 3, pen)
 		
 		abs_t_val = math.fabs(t_value)
 		t_val = scene.addText(str(abs_t_val))

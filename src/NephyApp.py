@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 #pyside
 from PySide.QtUiTools import *
 from PySide.QtCore import *
@@ -14,6 +17,7 @@ import os
 
 from graph_view import GraphView
 from measurement_field import MeasurementField
+from sindex_frame import SinDexFrame
 
 class NephyApp(QObject):
 	""" Main application code of the Nephy program """
@@ -68,14 +72,26 @@ class NephyApp(QObject):
 		# length combobox
 		length_cbox = self.ui.findChild(QWidget, "length_cbox")		
 		length_cbox.textChanged.connect(self.length_changed)
+		length_cbox.activated[str].connect(self.length_changed)
 		
 		# sd combobox
 		sd_cbox = self.ui.findChild(QWidget, "sd_cbox")		
 		sd_cbox.textChanged.connect(self.sd_changed)
+		sd_cbox.activated[str].connect(self.sd_changed)
 		
 		# Medianus t combobox
 		med_t_cbox = self.ui.findChild(QWidget, "med_t_cbox")
 		med_t_cbox.textChanged.connect(self.med_t_changed)
+		med_t_cbox.activated[str].connect(self.med_t_changed)
+		
+		# X axis combobox
+		x_coord_cbox = self.ui.findChild(QWidget, "x_coord_cbox")
+		
+		# example values
+		x_coord_cbox.addItem(u"Ikä")
+		x_coord_cbox.addItem("Pituus")
+		x_coord_cbox.addItem("Medianus_T")		
+		x_coord_cbox.activated[str].connect(self.x_axis_changed)
 		
 		# lin log radio buttons (only one of these are needed for the functionality)
 		graph_lin_radio = self.ui.findChild(QWidget, "graph_lin_radio")
@@ -254,25 +270,54 @@ class NephyApp(QObject):
 				nerve_info = self.ui.findChild(QWidget, "nerve_info_field")			
 				
 				# Fetching widget from the ui file
+				"""
 				loader = QUiLoader()
 				file = QFile(self.__resource("sindex_field.ui"))
 				file.open(QFile.ReadOnly)
 				sindex_field = loader.load(file, None)
 				file.close()
+				"""
+				#sin_field = sindex_field.findChild(QWidget, "sinister")				
+				#dex_field = sindex_field.findChild(QWidget, "dexter")	
+				sin_field = SinDexFrame("Sinister")
+				dex_field = SinDexFrame("Dexter")
 				
-				sin_field = sindex_field.findChild(QWidget, "sinister")
-				dex_field = sindex_field.findChild(QWidget, "dexter")	
+				sin_field.setParent(nerve_info)
+				dex_field.setParent(nerve_info)
+				
+				sin_field.move(10, 10)
+				dex_field.move(420, 10)				
 
 				example_data1 = {"p_value":0.0045, "t_value":0.5, "std_dev":2, "corresp_min":0, "corresp_max":10, "corresp_default":5, "meas_value":3.7}
 				example_data2 = {"p_value":0.0030, "t_value":1.2, "std_dev":3, "corresp_min":4, "corresp_max":12, "corresp_default":8, "meas_value":3.7}
 
 				# when adding a new measurement block, add 110 pixels to the y coordinate
 				meas_ampl = MeasurementField(self, "ra_apb", "Lat", example_data1)
-				meas_ampl.setParent(sin_field)
-				meas_ampl.move(18, 80)
+				#meas_ampl.setParent(sin_field)
+				sin_field.add_measurement_field(meas_ampl)
+				#meas_ampl.move(18, 80)
 				meas_ampl2 = MeasurementField(self, "ra_apb", "Ampl", example_data2)
-				meas_ampl2.setParent(sin_field)
-				meas_ampl2.move(18, 190)
+				sin_field.add_measurement_field(meas_ampl2)
+				#meas_ampl2.setParent(sin_field)
+				#meas_ampl2.move(18, 190)
+				
+				# Test Data
+				"""
+				meas_ampl3 = MeasurementField(self, "ra_apb", "Ampl", example_data2)
+				meas_ampl4 = MeasurementField(self, "ra_apb", "Ampl", example_data2)
+				meas_ampl5 = MeasurementField(self, "ra_apb", "Ampl", example_data2)
+				meas_ampl6 = MeasurementField(self, "ra_apb", "Ampl", example_data2)
+				meas_ampl7 = MeasurementField(self, "ra_apb", "Ampl", example_data2)
+				meas_ampl8 = MeasurementField(self, "ra_apb", "Ampl", example_data2)
+				meas_ampl9 = MeasurementField(self, "ra_apb", "Ampl", example_data2)
+				sin_field.add_measurement_field(meas_ampl3)
+				sin_field.add_measurement_field(meas_ampl4)
+				sin_field.add_measurement_field(meas_ampl5)
+				sin_field.add_measurement_field(meas_ampl6)
+				sin_field.add_measurement_field(meas_ampl7)
+				sin_field.add_measurement_field(meas_ampl8)
+				sin_field.add_measurement_field(meas_ampl9)
+				"""
 				
 				layout = nerve_info.layout()
 				if layout == None:
@@ -336,9 +381,9 @@ class NephyApp(QObject):
 		""" User has pressed the regression button, drawing regression lines or disabling them"""
 		regr_button = self.ui.findChild(QWidget, "regr_button")
 		if regr_button.checkState():
-			print "huuhaa"
+			print "regression activated"
 		else:
-			print "tarua"
+			print "regression deactivated"
 
 	def sd_changed(self):
 		""" User has changed the sd level, calculating new values"""
@@ -368,3 +413,9 @@ class NephyApp(QObject):
 			print "linear graph"
 		else:
 			print "logarithmic graph"
+
+	def x_axis_changed(self):
+		""" The unit of x axis has been changed, redrawing the graph with current unit """
+		x_coord_cbox = self.ui.findChild(QWidget, "x_coord_cbox")
+		new_axis = x_coord_cbox.currentText()
+		print new_axis

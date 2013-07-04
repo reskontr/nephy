@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from PySide.QtUiTools import *
 from PySide.QtCore import *
 from PySide.QtGui import *
@@ -56,7 +59,7 @@ class GraphView(pg.PlotWidget):
 		self.setLabel('left', unit_y["name"], units=unit_y['unit'])
 		
 	def mouseMoveEvent(self, event):		
-		""" Prints the crosshair to the graph so that the value of the point is more"""
+		""" Prints the crosshair to the graph so that the value of the point can be more easily read """
 		self.crosshair_x.setLine(0, event.y(), event.x(), event.y())
 		self.crosshair_y.setLine(event.x(), event.y(), event.x(), MAX_Y)
 

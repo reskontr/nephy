@@ -308,9 +308,9 @@ p, li { white-space: pre-wrap; }
      <widget class="QRadioButton" name="distr_log_radio">
       <property name="geometry">
        <rect>
-        <x>710</x>
-        <y>820</y>
-        <width>70</width>
+        <x>690</x>
+        <y>670</y>
+        <width>51</width>
         <height>30</height>
        </rect>
       </property>
@@ -321,9 +321,9 @@ p, li { white-space: pre-wrap; }
      <widget class="QRadioButton" name="distr_lin_radio">
       <property name="geometry">
        <rect>
-        <x>710</x>
-        <y>780</y>
-        <width>70</width>
+        <x>750</x>
+        <y>670</y>
+        <width>41</width>
         <height>30</height>
        </rect>
       </property>
@@ -340,7 +340,7 @@ p, li { white-space: pre-wrap; }
         <x>10</x>
         <y>10</y>
         <width>781</width>
-        <height>751</height>
+        <height>651</height>
        </rect>
       </property>
       <property name="frameShape">
@@ -359,7 +359,7 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>740</y>
+        <y>670</y>
         <width>97</width>
         <height>22</height>
        </rect>
@@ -371,9 +371,9 @@ p, li { white-space: pre-wrap; }
      <widget class="QRadioButton" name="graph_lin_radio">
       <property name="geometry">
        <rect>
-        <x>710</x>
-        <y>740</y>
-        <width>70</width>
+        <x>750</x>
+        <y>670</y>
+        <width>41</width>
         <height>30</height>
        </rect>
       </property>
@@ -387,9 +387,9 @@ p, li { white-space: pre-wrap; }
      <widget class="QRadioButton" name="graph_log_radio">
       <property name="geometry">
        <rect>
-        <x>710</x>
-        <y>780</y>
-        <width>70</width>
+        <x>690</x>
+        <y>670</y>
+        <width>51</width>
         <height>30</height>
        </rect>
       </property>
@@ -400,8 +400,8 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="length_label">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>770</y>
+        <x>230</x>
+        <y>710</y>
         <width>66</width>
         <height>17</height>
        </rect>
@@ -413,8 +413,8 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="med_t_label">
       <property name="geometry">
        <rect>
-        <x>190</x>
-        <y>770</y>
+        <x>20</x>
+        <y>710</y>
         <width>91</width>
         <height>17</height>
        </rect>
@@ -426,8 +426,8 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="sd_label">
       <property name="geometry">
        <rect>
-        <x>360</x>
-        <y>770</y>
+        <x>610</x>
+        <y>710</y>
         <width>66</width>
         <height>17</height>
        </rect>
@@ -439,9 +439,9 @@ p, li { white-space: pre-wrap; }
      <widget class="QComboBox" name="length_cbox">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>790</y>
-        <width>151</width>
+        <x>610</x>
+        <y>730</y>
+        <width>181</width>
         <height>31</height>
        </rect>
       </property>
@@ -449,9 +449,9 @@ p, li { white-space: pre-wrap; }
      <widget class="QComboBox" name="med_t_cbox">
       <property name="geometry">
        <rect>
-        <x>190</x>
-        <y>790</y>
-        <width>151</width>
+        <x>20</x>
+        <y>730</y>
+        <width>181</width>
         <height>31</height>
        </rect>
       </property>
@@ -459,21 +459,26 @@ p, li { white-space: pre-wrap; }
      <widget class="QComboBox" name="sd_cbox">
       <property name="geometry">
        <rect>
-        <x>360</x>
-        <y>790</y>
-        <width>151</width>
+        <x>230</x>
+        <y>730</y>
+        <width>181</width>
         <height>31</height>
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="label">
+     <widget class="QLabel" name="formula_label">
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>840</y>
-        <width>481</width>
+        <y>790</y>
+        <width>51</width>
         <height>16</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>Kaava:</string>
@@ -485,7 +490,7 @@ p, li { white-space: pre-wrap; }
         <x>10</x>
         <y>20</y>
         <width>781</width>
-        <height>711</height>
+        <height>641</height>
        </rect>
       </property>
       <property name="frameShape">
@@ -499,6 +504,47 @@ p, li { white-space: pre-wrap; }
       </property>
       <property name="midLineWidth">
        <number>0</number>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="x_coord_cbox">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>670</y>
+        <width>151</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="x_coord_label">
+      <property name="geometry">
+       <rect>
+        <x>290</x>
+        <y>670</y>
+        <width>51</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>X-akseli</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_2">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>790</y>
+        <width>461</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>[Kaavan label]</string>
       </property>
      </widget>
     </widget>
